@@ -28,7 +28,7 @@ async function getUserLocation() {
             try {
                 // Use OpenStreetMap Nominatim API for reverse geocoding (free, no API key needed)
                 const response = await fetch(
-                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1&accept-language=en`,
                     {
                         headers: {
                             'User-Agent': 'FoodieAI-LocationApp/1.0'
