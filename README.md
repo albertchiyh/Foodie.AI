@@ -1,31 +1,14 @@
-# Recipe Recommendation System
+# Foodie.AI - Manhattan Restaurant Recommendation System
 
-A smart recipe recommendation system that helps users find recipes based on ingredients they have in their refrigerator. The system uses semantic embeddings to match user ingredients with recipe ingredients and provides cooking steps.
+A smart restaurant recommendation system for Manhattan that helps users find restaurants based on their food cravings. The system uses semantic embeddings with FAISS for fast similarity search to match user queries with restaurant reviews.
 
 ## Features
 
-- **CSV Recipe Ingestion**: Upload recipe CSV files with id, title, ingredient, and step columns
-- **Ingredient-based Search**: Find recipes using available ingredients
-- **Semantic Matching**: Uses AI embeddings for intelligent ingredient matching
-- **Recipe Recommendations**: Get recipes with match scores and missing ingredients
-- **Cooking Steps**: View detailed cooking instructions for each recipe
-- **Hybrid Search**: Combines semantic and keyword matching for better results
-
-## CSV Format
-
-Your recipe CSV file should have the following columns:
-
-- `id`: Unique identifier for the recipe
-- `title`: Recipe name
-- `ingredient`: Comma-separated list of ingredients
-- `step`: Detailed cooking instructions
-
-Example:
-
-```csv
-id,title,ingredient,step
-1,Chicken Fried Rice,chicken, rice, eggs, soy sauce, vegetables, oil,1. Cook rice and let it cool. 2. Heat oil in a pan. 3. Add chicken and cook until done. 4. Add vegetables and stir-fry. 5. Add rice and eggs. 6. Season with soy sauce and serve.
-```
+- **AI-Powered Search**: Natural language search understands exactly what you're craving
+- **Location-Based Filtering**: Filter restaurants by Manhattan neighborhood
+- **FAISS Similarity Search**: Fast and efficient semantic search using FAISS index
+- **Review-Based Matching**: Matches user queries with restaurant reviews using SentenceTransformer embeddings
+- **Restaurant Recommendations**: Get restaurants with match scores, ratings, and reviews
 
 ## Installation
 
@@ -35,12 +18,9 @@ id,title,ingredient,step
 pip install -r requirements.txt
 ```
 
-2. Set up environment variables:
-
-```bash
-# Create a .env file with your Mistral API key
-MISTRAL_API_KEY=your_mistral_api_key_here
-```
+2. Ensure you have the required data files in the `static/` directory:
+   - `manhattan_FoodieAI.csv`: CSV file with restaurant data
+   - `text_FoodieAI_index.faiss`: FAISS index file with pre-computed embeddings
 
 3. Run the application:
 
@@ -48,90 +28,118 @@ MISTRAL_API_KEY=your_mistral_api_key_here
 python app.py
 ```
 
+The application will start at `http://localhost:8000`
+
 ## Usage
 
-1. **Upload Recipe Data**:
-
+1. **Search for Restaurants**:
    - Go to the web interface at `http://localhost:8000`
-   - Upload your CSV recipe file using the "Upload Recipes" button
-   - The system will process and create embeddings for ingredient matching
+   - Describe your food craving in natural language (e.g., "spicy Thai crab curry", "authentic Italian pasta")
+   - Optionally select a Manhattan neighborhood to filter results
+   - Click "Find My Perfect Restaurant" to get recommendations
 
-2. **Search for Recipes**:
-
-   - Enter your available ingredients in the "Available Ingredients" field
-   - Click "Find Recipes" to get recommendations
-   - View match scores, matched ingredients, and missing ingredients
-   - Click on "View Cooking Steps" to see detailed instructions
-
-3. **Adjust Search Parameters**:
-   - Use the "Top K Results" slider to control how many recipes to return
-   - Adjust the "Similarity Threshold" to control match sensitivity
-   - Enable/disable hybrid search for different matching strategies
+2. **View Results**:
+   - See restaurants ranked by match score (cosine similarity)
+   - View restaurant details: name, cuisine type, address, rating
+   - Read review snippets that match your query
 
 ## API Endpoints
 
-### Upload Recipes
+### Search Restaurants
 
 ```
-POST /ingest-recipes
-Content-Type: multipart/form-data
-
-Upload CSV files containing recipe data
-```
-
-### Search Recipes
-
-```
-POST /search-recipes
+POST /search-restaurants
 Content-Type: application/json
 
 {
-  "ingredients": ["chicken", "rice", "vegetables"],
-  "top_k": 5,
-  "threshold": 0.6
+  "query": "spicy Thai crab curry",
+  "neighborhood": "chinatown",  // optional
+  "top_k": 10
+}
+```
+
+Response:
+```json
+{
+  "restaurants": [
+    {
+      "name": "Restaurant Name",
+      "address": "123 Main St",
+      "cuisine_type": "Thai",
+      "rating": 4.5,
+      "match_score": 0.85,
+      "zipcode": 10013,
+      "review_clean": "Great Thai food..."
+    }
+  ],
+  "query": "spicy Thai crab curry",
+  "total_matches": 10,
+  "processing_time": 0.123
 }
 ```
 
 ## How It Works
 
-1. **Ingestion**: CSV files are parsed and recipe data is extracted
-2. **Embedding Generation**: Ingredient lists are converted to semantic embeddings using Mistral AI
-3. **Storage**: Recipe data and embeddings are stored in a JSON knowledge base
-4. **Search**: User ingredients are embedded and compared with recipe embeddings
-5. **Matching**: The system uses cosine similarity and keyword matching to find relevant recipes
-6. **Ranking**: Results are ranked by match score and ingredient overlap
+1. **Data Loading**: Restaurant data is loaded from CSV file with reviews
+2. **FAISS Index**: Pre-computed embeddings stored in FAISS index for fast search
+3. **Query Embedding**: User query is embedded using SentenceTransformer ('all-MiniLM-L6-v2')
+4. **Similarity Search**: FAISS performs fast cosine similarity search
+5. **Neighborhood Filtering**: Results are filtered by zipcode based on selected neighborhood
+6. **Ranking**: Results are ranked by match score (cosine similarity)
 
 ## File Structure
 
 ```
-├── app.py                          # Main FastAPI application
-├── models.py                       # Pydantic data models
+├── app.py                              # Main FastAPI application
+├── models.py                           # Pydantic data models
+├── utils.py                            # Embedding utilities (SentenceTransformer)
 ├── services/
-│   ├── recipe_service.py          # CSV processing and recipe management
-│   └──  recipe_search_service.py   # Recipe search and matching logic
-├── utils.py                        # Utility functions
-├── requirements.txt                # Python dependencies
-└── README.md                      # This file
+│   ├── restaurant_service.py          # CSV loading and FAISS index management
+│   └── restaurant_search_service.py   # Restaurant search logic with FAISS
+├── static/
+│   ├── index.html                     # Frontend HTML interface
+│   ├── manhattan_FoodieAI.csv         # Restaurant data CSV
+│   └── text_FoodieAI_index.faiss     # FAISS index file
+├── requirements.txt                    # Python dependencies
+└── README.md                          # This file
 ```
 
-## Example Usage
+## Neighborhood Mapping
 
-1. Start the server: `python app.py`
-2. Open browser to `http://localhost:8000`
-3. Upload the sample_recipes.csv file
-4. Enter ingredients like "chicken, rice, eggs" in the search field
-5. Click "Find Recipes" to see recommendations
+The system supports filtering by Manhattan neighborhoods:
+
+- Lower East Side
+- Chinatown
+- SoHo
+- Greenwich Village
+- East Village
+- Chelsea
+- Midtown
+- Upper West Side
+- Upper East Side
+- Harlem
+- Washington Heights
+
+Each neighborhood is mapped to specific zipcodes for accurate filtering.
+
+## Technologies Used
+
+- **FastAPI**: Web framework for building APIs
+- **FAISS**: Facebook AI Similarity Search for efficient vector search
+- **SentenceTransformer**: For generating semantic embeddings
+- **Pandas**: For CSV data processing
+- **NumPy**: For numerical operations
 
 ## Customization
 
-- Modify `services/recipe_service.py` to change CSV parsing logic
-- Adjust `services/recipe_search_service.py` for different matching algorithms
-- Update the UI in `app.py` for different interface designs
-- Modify embedding models in `utils.py` for different AI providers
+- Modify `services/restaurant_service.py` to change CSV parsing logic or neighborhood mappings
+- Adjust `services/restaurant_search_service.py` for different search algorithms
+- Update the UI in `static/index.html` for different interface designs
+- Modify embedding models in `utils.py` (currently uses 'all-MiniLM-L6-v2')
 
 ## Troubleshooting
 
-- Ensure your Mistral API key is correctly set in the `.env` file
-- Check that CSV files have the correct column names (id, title, ingredient, step)
-- Verify that ingredients are comma-separated in the CSV
-- Check the console for error messages during processing
+- Ensure CSV file and FAISS index are in the `static/` directory
+- Check that the FAISS index matches the CSV data (same number of rows)
+- Verify embeddings were created with the same model ('all-MiniLM-L6-v2')
+- Check console logs for error messages during startup or search

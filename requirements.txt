@@ -1,9 +1,9 @@
 fastapi==0.104.1
 uvicorn==0.24.0
 python-multipart==0.0.6
-pdfplumber==0.10.3
-pdf2image==1.16.3
-pytesseract==0.3.10
-mistralai==0.0.12
-numpy==1.24.3
+numpy>=2.1.0
 python-dotenv==1.0.0
+faiss-cpu>=1.10.0,<2
+sentence-transformers>=3.0.0,<4.0.0
+pandas>=2.2.3
+mistralai>=0.0.11

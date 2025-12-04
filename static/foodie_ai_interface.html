@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Foodie.AI - Your NYC Ultimate Food Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a1929 0%, #1a2942 100%);
+            min-height: 100vh;
+            color: #e3f2fd;
+            line-height: 1.7;
+        }
+        
+        .container { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            background: #0d1b2a;
+            min-height: 100vh;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header { 
+            background: linear-gradient(135deg, #1b263b 0%, #0d1b2a 100%);
+            color: white; 
+            padding: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 3px solid #ffd60a;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 214, 10, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.6; }
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo-icon {
+            font-size: 4rem;
+            filter: drop-shadow(0 4px 8px rgba(255, 214, 10, 0.4));
+        }
+        
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 0 0 0.5rem 0;
+            letter-spacing: -0.025em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #ffd60a;
+        }
+        
+        .header .subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .header .tagline {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.75);
+            font-weight: 400;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 250px);
+        }
+        
+        .search-section {
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+            padding: 4rem 2rem;
+            border-bottom: 2px solid #ffd60a;
+        }
+        
+        .search-box {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .search-box h2 {
+            color: #e3f2fd;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        
+        .search-input-group {
+            background: #1b263b;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1.5rem;
+            border: 2px solid #0d1b2a;
+        }
+        
+        .search-input-group label {
+            display: block;
+            color: #e3f2fd; 
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+        
+        .search-input-group label i {
+            color: #ffd60a;
+            margin-right: 0.5rem;
+        }
+        
+        .location-select-wrapper {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .location-select-wrapper select {
+            flex: 1;
+        }
+        
+        .location-divider {
+            color: #b0c4de;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0 0.5rem;
+            white-space: nowrap;
+        }
+        
+        .location-btn {
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, #1b263b, #0d1b2a);
+            color: #ffd60a;
+            border: 2px solid #ffd60a;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.125rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            font-weight: 600;
+            min-width: 180px;
+        }
+        
+        .location-btn:hover {
+            background: linear-gradient(135deg, #ffd60a, #ffc300);
+            color: #0d1b2a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 214, 10, 0.4);
+        }
+        
+        .location-btn:active {
+            transform: translateY(0);
+        }
+        
+        .location-btn.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .location-btn.loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        .location-info {
+            margin-top: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: #0a1929;
+            border-radius: 8px;
+            border-left: 3px solid #ffd60a;
+            color: #b0c4de;
+            font-size: 0.95rem;
+            display: none;
+        }
+        
+        .location-info.show {
+            display: block;
+        }
+        
+        .location-info i {
+            color: #ffd60a;
+            margin-right: 0.5rem;
+        }
+        
+        .search-input-group input, 
+        .search-input-group select {
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            border: 2px solid #0d1b2a;
+            border-radius: 12px;
+            background: #0a1929;
+            color: #e3f2fd;
+            font-size: 1.125rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .search-input-group input::placeholder {
+            color: #64748b;
+        }
+        
+        .search-input-group input:focus,
+        .search-input-group select:focus {
+            border-color: #ffd60a;
+            box-shadow: 0 0 0 4px rgba(255, 214, 10, 0.2);
+            transform: translateY(-2px);
+            background: #0d1b2a;
+        }
+        
+        .search-btn {
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #ffd60a, #ffc300);
+            color: #0d1b2a;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.375rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 10px 25px rgba(255, 214, 10, 0.4);
+            margin-top: 1.5rem;
+        }
+        
+        .search-btn:hover {
+            background: linear-gradient(135deg, #ffed4e, #ffd60a);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 214, 10, 0.5);
+        }
+        
+        .results-container {
+            flex: 1;
+            padding: 3rem 2rem;
+            background: #0a1929;
+        }
+        
+        .results-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .welcome-message {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+        
+        .welcome-card {
+            background: linear-gradient(135deg, #1b263b, #0d1b2a);
+            padding: 4rem;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            max-width: 700px;
+            border: 2px solid #1b263b;
+        }
+        
+        .welcome-card .icon {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #ffd60a, #ffc300);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .welcome-card h3 {
+            color: #ffd60a;
+            margin-bottom: 1.5rem;
+            font-size: 2.25rem;
+            font-weight: 800;
+        }
+        
+        .welcome-card p {
+            color: #b0c4de;
+            font-size: 1.125rem;
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+        }
+        
+        .feature-list {
+            display: grid;
+            gap: 1.5rem;
+            text-align: left;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #0d1b2a, #0a1929);
+            border-radius: 12px;
+            border-left: 4px solid #ffd60a;
+            border: 1px solid #1b263b;
+        }
+        
+        .feature-icon {
+            background: linear-gradient(135deg, #ffd60a, #ffc300);
+            color: #0d1b2a;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 12px rgba(255, 214, 10, 0.4);
+            flex-shrink: 0;
+        }
+        
+        .ai-icon {
+            background: #ffd60a;
+            color: #2c3e50;
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: -0.05em;
+            position: relative;
+        }
+        
+        .ai-icon::before,
+        .ai-icon::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 8px;
+            background: #2c3e50;
+        }
+        
+        .ai-icon::before {
+            top: 5px;
+            left: -8px;
+            transform: rotate(-45deg);
+        }
+        
+        .ai-icon::after {
+            top: 5px;
+            right: -8px;
+            transform: rotate(45deg);
+        }
+        
+        .trust-icon {
+            background: #ffd60a;
+            position: relative;
+            overflow: visible;
+        }
+        
+        .trust-icon svg {
+            width: 2rem;
+            height: 2rem;
+            fill: none;
+            stroke: #2c3e50;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        
+        .location-icon {
+            background: #ffd60a;
+            position: relative;
+        }
+        
+        .location-icon svg {
+            width: 2rem;
+            height: 2rem;
+            fill: #2c3e50;
+        }
+        
+        .feature-item strong {
+            color: #ffd60a;
+        }
+        
+        .feature-item {
+            color: #b0c4de;
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #1b263b, #0d1b2a);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid #1b263b;
+        }
+        
+        .results-header h2 {
+            color: #ffd60a;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        
+        .results-header p {
+            color: #b0c4de;
+            font-size: 1.125rem;
+        }
+        
+        .results-header strong {
+            color: #ffd60a;
+        }
+        
+        .restaurant-card {
+            background: linear-gradient(135deg, #1b263b, #0d1b2a);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border-left: 5px solid #ffd60a;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #1b263b;
+        }
+        
+        .restaurant-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.05), rgba(255, 195, 0, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .restaurant-card:hover::before {
+            opacity: 1;
+        }
+        
+        .restaurant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(255, 214, 10, 0.3);
+            border-left-color: #ffed4e;
+        }
+        
+        .restaurant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #0a1929;
+        }
+        
+        .restaurant-header h3 {
+            color: #ffd60a;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .restaurant-type {
+            color: #b0c4de;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .match-badge {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.125rem;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+            white-space: nowrap;
+        }
+        
+        .info-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-section h4 {
+            color: #ffd60a;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .info-section h4 i {
+            color: #ffd60a;
+        }
+        
+        .info-content {
+            background: #0a1929;
+            padding: 1.25rem;
+            border-radius: 10px;
+            border-left: 4px solid #ffd60a;
+            color: #b0c4de;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        
+        .llm-comment {
+            background: linear-gradient(135deg, rgba(255, 214, 10, 0.1), rgba(147, 112, 219, 0.1));
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #9370db;
+            color: #d8b8ff;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            font-style: italic;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .llm-comment i {
+            color: #9370db;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        
+        .restaurant-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: #0a1929;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid #1b263b;
+        }
+        
+        .detail-item:hover {
+            background: #1b263b;
+            box-shadow: 0 2px 8px rgba(255, 214, 10, 0.2);
+            border-color: #ffd60a;
+        }
+        
+        .detail-icon {
+            color: #ffd60a;
+            font-size: 1.25rem;
+            margin-top: 0.25rem;
+        }
+        
+        .detail-content h5 {
+            color: #ffd60a;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .detail-content p {
+            color: #e3f2fd;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        .grade-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .loading-container {
+            text-align: center;
+            padding: 4rem;
+            background: linear-gradient(135deg, #1b263b, #0d1b2a);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid #1b263b;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 4rem;
+            height: 4rem;
+            border: 4px solid #1b263b;
+            border-top: 4px solid #ffd60a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 2rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-container h3 {
+            color: #ffd60a;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .loading-container p {
+            color: #b0c4de;
+            font-size: 1rem;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 4rem;
+            background: linear-gradient(135deg, #1b263b, #0d1b2a);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid #1b263b;
+        }
+        
+        .no-results i {
+            font-size: 4rem;
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+        
+        .no-results h3 {
+            color: #ffd60a;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .no-results p {
+            color: #b0c4de;
+            font-size: 1.125rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .restaurant-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .location-select-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .location-divider {
+                text-align: center;
+                padding: 0.5rem 0;
+            }
+            
+            .location-btn {
+                width: 100%;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script src="/static/location.js"></script>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">🍽️</div>
+                </div>
+                <h1>Foodie.AI</h1>
+                <p class="subtitle">Your NYC Ultimate Guide for Food Adventure</p>
+                <p class="tagline">Discover amazing restaurants in Manhattan with AI-powered recommendations</p>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="search-section">
+                <div class="search-box">
+                    <h2>🍽️ What are you craving?</h2>
+                    
+                    <div class="search-input-group">
+                        <label><i class="fas fa-bowl-food"></i> Describe your food craving</label>
+                        <input 
+                            type="text" 
+                            id="foodInput" 
+                            placeholder="E.g., spicy Thai crab curry, authentic Italian pasta, cozy coffee shop with WiFi..."
+                            onkeypress="handleKeyPress(event)"
+                        >
+                    </div>
+                    
+                    <div class="search-input-group">
+                        <label><i class="fas fa-location-dot"></i> Select Location</label>
+                        <div class="location-select-wrapper">
+                            <select id="neighborhoodSelect" onchange="handleNeighborhoodChange()">
+                                <option value="">All Manhattan</option>
+                                <option value="lower-east-side">Lower East Side</option>
+                                <option value="chinatown">Chinatown</option>
+                                <option value="soho">SoHo</option>
+                                <option value="greenwich-village">Greenwich Village</option>
+                                <option value="east-village">East Village</option>
+                                <option value="chelsea">Chelsea</option>
+                                <option value="midtown">Midtown</option>
+                                <option value="upper-west-side">Upper West Side</option>
+                                <option value="upper-east-side">Upper East Side</option>
+                                <option value="harlem">Harlem</option>
+                                <option value="washington-heights">Washington Heights</option>
+                            </select>
+                            <div class="location-divider">OR</div>
+                            <button class="location-btn" id="locationBtn" onclick="getUserLocation()">
+                                <i class="fas fa-location-crosshairs"></i>
+                                <span id="locationBtnText">Get My Location</span>
+                            </button>
+                        </div>
+                        <div class="location-info" id="locationInfo"></div>
+                    </div>
+                    
+                    <button class="search-btn" onclick="searchRestaurants()">
+                        <i class="fas fa-magnifying-glass"></i> Find My Perfect Restaurant
+                    </button>
+                </div>
+            </div>
+            
+            <div class="results-container">
+                <div class="results-wrapper" id="resultsContainer">
+                    <div class="welcome-message">
+                        <div class="welcome-card">
+                            <div class="icon">🍽️</div>
+                            <h3>Welcome to Foodie.AI!</h3>
+                            <p>Discover the best restaurants in Manhattan with AI-powered personalized recommendations. We combine cutting-edge technology with NYC health inspection data to help you find safe, delicious dining experiences.</p>
+                            
+                            <div class="feature-list">
+                                <div class="feature-item">
+                                    <div class="feature-icon ai-icon">AI</div>
+                                    <div>
+                                        <strong>Smart AI Matching</strong><br>
+                                        Natural language search understands exactly what you're craving
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon trust-icon">
+                                        <svg viewBox="0 0 24 24">
+                                            <!-- Shield -->
+                                            <path d="M12 2 L12 2 C12 2, 20 4, 20 10 C20 16, 12 22, 12 22 C12 22, 4 16, 4 10 C4 4, 12 2, 12 2 Z" fill="none"/>
+                                            <!-- Checkmark -->
+                                            <path d="M8 12 L11 15 L16 9" fill="none"/>
+                                            <!-- Handshake base -->
+                                            <path d="M7 14 L9 14 M15 14 L17 14" stroke-width="3"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <strong>Trusted by Food Lovers</strong><br>
+                                        Real reviews and ratings from NYC's passionate food community
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item">
+                                    <div class="feature-icon location-icon">
+                                        <svg viewBox="0 0 24 24">
+                                            <!-- Map pin shape -->
+                                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                                            <!-- Inner circle -->
+                                            <circle cx="12" cy="9" r="2.5" fill="#ffd60a"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <strong>Location-Based</strong><br>
+                                        Find restaurants in your favorite Manhattan neighborhoods
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                searchRestaurants();
+            }
+        }
+        
+        function searchRestaurants() {
+            const foodInput = document.getElementById('foodInput');
+            const neighborhoodSelect = document.getElementById('neighborhoodSelect');
+            const ingredients = foodInput.value.trim();
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            if (!ingredients) {
+                alert('Please describe what you\'re craving!');
+                return;
+            }
+            
+            // Use location if set, otherwise use neighborhood (mutually exclusive)
+            const neighborhood = userLocation ? '' : neighborhoodSelect.value;
+            const locationText = userLocation 
+                ? ` near ${userLocation.zipcode !== 'Not available' ? 'zipcode ' + userLocation.zipcode : 'your location'}`
+                : (neighborhood ? ' in ' + neighborhood.replace(/-/g, ' ') : '');
+            
+            resultsContainer.innerHTML = `
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <h3>Searching for restaurants...</h3>
+                    <p>Finding the perfect match for: "${ingredients}"${locationText}</p>
+                </div>
+            `;
+            
+            const requestBody = {
+                query: ingredients,
+                top_k: 10
+            };
+            
+            // Include location or neighborhood (mutually exclusive)
+            if (userLocation) {
+                requestBody.location = {
+                    latitude: userLocation.latitude,
+                    longitude: userLocation.longitude,
+                    zipcode: userLocation.zipcode,
+                    city: userLocation.city,
+                    state: userLocation.state
+                };
+            } else if (neighborhood) {
+                requestBody.neighborhood = neighborhood;
+            }
+            
+            fetch('/search-restaurants', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayResults(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h3>Oops! Something went wrong</h3>
+                        <p>We couldn't complete your search. Please try again.</p>
+                    </div>
+                `;
+            });
+        }
+        
+        function displayResults(data) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            if (!data.restaurants || data.restaurants.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-magnifying-glass"></i>
+                        <h3>No restaurants found</h3>
+                        <p>Try adjusting your search or selecting a different neighborhood.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="results-header">
+                    <h2><i class="fas fa-utensils"></i> Restaurant Recommendations</h2>
+                    <p>Found <strong>${data.restaurants.length} restaurants</strong> for your search: <strong>${data.query}</strong></p>
+                    ${data.restaurants.some(r => r.llm_rank) ? '<p style="font-size: 0.9rem; color: #888;"><i class="fas fa-robot"></i> Ranked by AI Assistant</p>' : ''}
+                </div>
+            `;
+            
+            data.restaurants.forEach((restaurant, index) => {
+                const matchPercentage = (restaurant.match_score * 100).toFixed(1);
+                
+                html += `
+                    <div class="restaurant-card">
+                        <div class="restaurant-header">
+                            <div>
+                                <h3>${restaurant.name}</h3>
+                                <p class="restaurant-type">${restaurant.cuisine_type || 'Restaurant'}</p>
+                            </div>
+                            <div class="match-badge">
+                                ${matchPercentage}% match
+                                ${restaurant.llm_rank ? ` • #${restaurant.llm_rank} by AI` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="restaurant-details">
+                            <div class="detail-item">
+                                <i class="fas fa-location-dot detail-icon"></i>
+                                <div class="detail-content">
+                                    <h5>Location</h5>
+                                    <p>${restaurant.address || 'Address not available'}</p>
+                                </div>
+                            </div>
+                            
+                            ${restaurant.neighborhood ? `
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt detail-icon"></i>
+                                <div class="detail-content">
+                                    <h5>Area</h5>
+                                    <p>${restaurant.neighborhood.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
+                                </div>
+                            </div>
+                            ` : ''}
+                            
+                            <div class="detail-item">
+                                <i class="fas fa-star detail-icon"></i>
+                                <div class="detail-content">
+                                    <h5>Rating</h5>
+                                    <p>${restaurant.rating || 'Not rated'} ${restaurant.rating ? '⭐' : ''}</p>
+                                </div>
+                            </div>
+                            
+                            ${restaurant.link ? `
+                            <div class="detail-item">
+                                <i class="fas fa-map-marked-alt detail-icon"></i>
+                                <div class="detail-content">
+                                    <h5>Google Maps</h5>
+                                    <p><a href="${restaurant.link}" target="_blank" rel="noopener noreferrer" style="color: #ffd60a; text-decoration: none; position: relative; z-index: 10; cursor: pointer;">View on Google Maps <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i></a></p>
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
+                        
+                        ${restaurant.review_clean ? `
+                        <div class="info-section">
+                            <h4><i class="fas fa-comment-dots"></i> Review:</h4>
+                            <div class="info-content">${restaurant.review_clean}</div>
+                            ${restaurant.llm_comment ? `
+                            <div class="llm-comment">
+                                <i class="fas fa-robot"></i> <strong>AI Insight:</strong> ${restaurant.llm_comment}
+                            </div>
+                            ` : ''}
+                        </div>
+                        ` : ''}
+                        
+                        ${restaurant.menu ? `
+                        <div class="info-section">
+                            <h4><i class="fas fa-utensils"></i> Popular Menu Items:</h4>
+                            <div class="info-content">${restaurant.menu}</div>
+                        </div>
+                        ` : ''}
+                        
+                        ${restaurant.description ? `
+                        <div class="info-section">
+                            <h4><i class="fas fa-circle-info"></i> About:</h4>
+                            <div class="info-content">${restaurant.description}</div>
+                        </div>
+                        ` : ''}
+                        
+                        ${restaurant.specialties ? `
+                        <div class="info-section">
+                            <h4><i class="fas fa-fire-flame-curved"></i> Specialties:</h4>
+                            <div class="info-content">${restaurant.specialties}</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            resultsContainer.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

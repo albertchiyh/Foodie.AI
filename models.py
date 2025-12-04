@@ -1,64 +1,39 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-class QueryRequest(BaseModel):
+# Restaurant-specific models
+class RestaurantSearchRequest(BaseModel):
     query: str
-    top_k: int = 5
-    threshold: float = 0.6
-    use_hybrid: bool = True
-    intent: Optional[str] = None
+    neighborhood: Optional[str] = None
+    top_k: int = 20
 
-class QueryResponse(BaseModel):
-    answer: str
-    citations: List[str]
-    confidence: float
-    evidence_score: float
-    query_type: str
-    processing_time: float
+class Restaurant(BaseModel):
+    name: str
+    boro: str
+    buildings: str
+    street: str
+    zipcode: float
+    cuisine_type: str
+    address: str
+    rating: Optional[float] = None
+    review: Optional[str] = None
+    review_clean: Optional[str] = None
 
-class IngestionResponse(BaseModel):
-    status: str
-    ingested_chunks: int
-    files_processed: List[str]
-    total_chunks: int
-
-# Recipe-specific models
-class Recipe(BaseModel):
-    id: str
-    title: str
-    ingredients: str
-    steps: str
-    embedding: Optional[List[float]] = None
-
-class RecipeIngestionRequest(BaseModel):
-    csv_file: str  # Base64 encoded CSV content or file path
-
-class RecipeIngestionResponse(BaseModel):
-    status: str
-    recipes_processed: int
-    total_recipes: int
-
-class IngredientSearchRequest(BaseModel):
-    ingredients: List[str]
-    top_k: int = 5
-    threshold: float = 0.6
-
-class RecipeSearchRequest(BaseModel):
-    user_input: str
-    top_k: int = 5
-    threshold: float = 0.6
-
-class RecipeRecommendation(BaseModel):
-    recipe_id: str
-    title: str
-    ingredients: str
-    steps: str
+class RestaurantRecommendation(BaseModel):
+    name: str
+    address: str
+    cuisine_type: str
+    rating: Optional[float] = None
     match_score: float
-    matched_ingredients: List[str]
-    missing_ingredients: List[str]
+    zipcode: float
+    review_clean: Optional[str] = None
+    link: Optional[str] = None
+    neighborhood: Optional[str] = None
+    llm_rank: Optional[int] = None
+    llm_comment: Optional[str] = None
 
-class RecipeSearchResponse(BaseModel):
-    recommendations: List[RecipeRecommendation]
+class RestaurantSearchResponse(BaseModel):
+    restaurants: List[RestaurantRecommendation]
+    query: str
     total_matches: int
     processing_time: float
-    parsed_ingredients: Optional[List[str]] = None
